@@ -1,6 +1,6 @@
 FROM node:20-slim
 
-# Chromium + dependencies (whatsapp-web.js ke liye zaroori)
+# Chromium + dependencies
 RUN apt-get update && apt-get install -y \
     chromium \
     fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg \
@@ -15,16 +15,13 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-# Package files copy karke install
 COPY package*.json ./
-RUN npm ci --only=production
 
-# Baaki saara code copy
+# npm ci ki jagah npm install use karo
+RUN npm install --production
+
 COPY . .
-
-# Next.js build
 RUN npm run build
 
 EXPOSE 3000
-
 CMD ["npm", "start"]
